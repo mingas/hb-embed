@@ -240,7 +240,7 @@
 
   function build() {
     injectStyles();
-    var host = document.getElementById("meno-quiz") || document.querySelector("[data-meno-quiz]");
+    var host = document.getElementById("tool-mount") || document.getElementById("meno-quiz") || document.querySelector("[data-meno-quiz]");
     if (!host) {
       host = document.createElement("div");
       host.id = "meno-quiz";
