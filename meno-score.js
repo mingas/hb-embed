@@ -68,6 +68,8 @@
       + ".mbq .opt:hover{border-color:#12294A;background:#F7F9FC}"
       + ".mbq .opt .rd{width:17px;height:17px;border-radius:50%;border:2px solid #cdd4dc;flex:none}"
       + ".mbq .opt .sc{margin-left:auto;font-size:11.5px;color:#aeb6bf}"
+      + ".mbq .opt.sel{border-color:#C39A4A;background:#FBF6EC}"
+      + ".mbq .opt.sel .rd{border-color:#C39A4A;background:#C39A4A;box-shadow:inset 0 0 0 3px #fff}"
       + ".mbq .total{display:flex;align-items:baseline;gap:10px;margin:2px 0 4px}"
       + ".mbq .total b{font-family:Fraunces,Georgia,serif;font-weight:500;font-size:40px;color:#12294A;line-height:1}"
       + ".mbq .total span{font-size:14px;color:#6E7A88}"
@@ -116,7 +118,8 @@
   function renderQ(i) {
     var q = Q[i], pct = Math.round((i / 11) * 100), opts = "";
     for (var k = 0; k < 5; k++) {
-      opts += '<button class="opt" data-v="' + k + '"><span class="rd"></span>' + OPTS[k] + '<span class="sc">' + k + '</span></button>';
+      var selCls = (ans[i] === k) ? " sel" : "";
+      opts += '<button class="opt' + selCls + '" data-v="' + k + '"><span class="rd"></span>' + OPTS[k] + '<span class="sc">' + k + '</span></button>';
     }
     body.innerHTML = ""
       + '<div class="prog"><i style="width:' + pct + '%"></i></div>'
@@ -127,7 +130,10 @@
     for (var j = 0; j < bs.length; j++) {
       bs[j].onclick = function () {
         ans[i] = parseInt(this.getAttribute("data-v"), 10);
-        if (i < 10) renderQ(i + 1); else result();
+        for (var m = 0; m < bs.length; m++) bs[m].classList.remove("sel");
+        this.classList.add("sel");
+        if (i < 10) setTimeout(function () { renderQ(i + 1); }, 180);
+        else setTimeout(function () { result(); }, 180);
       };
     }
     var bk = document.getElementById("mbq-back");
