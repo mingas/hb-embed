@@ -103,6 +103,27 @@
 
   var TICK = '<svg width="17" height="17" viewBox="0 0 17 17" fill="none"><circle cx="8.5" cy="8.5" r="8.5" fill="#F1E8D2"/><path d="M5 8.8l2.3 2.2L12 6.3" stroke="#C39A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
+  function embedBox() {
+    if (EMBED) return "";
+    return '<button class="embed-link" id="mbq-embed-toggle">Want this on your site? Get the embed code</button>'
+      + '<div class="embed-box" id="mbq-embed-box"><textarea readonly id="mbq-embed-code">'
+      + '&lt;iframe src="' + EMBED_SRC + '" width="100%" height="640" loading="lazy" style="border:0;max-width:560px" title="Low testosterone symptom score"&gt;&lt;/iframe&gt;'
+      + '</textarea><button class="btn sec cp" id="mbq-copy">Copy code</button></div>';
+  }
+  function wireEmbed() {
+    if (EMBED) return;
+    var tg = document.getElementById("mbq-embed-toggle");
+    var bx = document.getElementById("mbq-embed-box");
+    if (!tg || !bx) return;
+    tg.onclick = function () { bx.style.display = bx.style.display === "block" ? "none" : "block"; };
+    document.getElementById("mbq-copy").onclick = function () {
+      var ta = document.getElementById("mbq-embed-code");
+      ta.select();
+      try { document.execCommand("copy"); this.textContent = "Copied"; } catch (e) {}
+      var self = this; setTimeout(function () { self.textContent = "Copy code"; }, 1600);
+    };
+  }
+
   function start() {
     body.innerHTML = ""
       + '<p class="lead">In about a minute, see how strongly your symptoms point to low testosterone \u2014 and what to do next. Nothing is stored or sent.</p>'
@@ -112,8 +133,10 @@
       + '<li>' + TICK + 'A free, personalised next step</li>'
       + '</ul>'
       + '<button class="btn" id="mbq-start">Start the check</button>'
-      + '<p class="priv">Your answers stay on your device.</p>';
+      + '<p class="priv">Your answers stay on your device.</p>'
+      + embedBox();
     document.getElementById("mbq-start").onclick = function () { renderQ(0); };
+    wireEmbed();
   }
 
   function renderQ(i) {
@@ -168,11 +191,7 @@
       sub += '<div class="sub-row"><div class="sub-top"><span class="nm">' + x.nm + '</span><span class="vl">' + x.v + ' / ' + x.max + '</span></div>'
         + '<div class="bar"><i style="width:' + w + '%;background:' + bandColour(x.b) + '"></i></div></div>';
     }
-    var embedSection = EMBED ? "" :
-      '<button class="embed-link" id="mbq-embed-toggle">Want this on your site? Get the embed code</button>'
-      + '<div class="embed-box" id="mbq-embed-box"><textarea readonly id="mbq-embed-code">'
-      + '&lt;iframe src="' + EMBED_SRC + '" width="100%" height="640" loading="lazy" style="border:0;max-width:560px" title="Low testosterone symptom score"&gt;&lt;/iframe&gt;'
-      + '</textarea><button class="btn sec cp" id="mbq-copy">Copy code</button></div>';
+    var embedSection = embedBox();
 
     body.innerHTML = ""
       + '<div class="total"><b>' + total + '</b><span>/ 44 symptom score</span></div>'
@@ -189,17 +208,7 @@
     document.getElementById("mbq-again").onclick = function () { ans = Array(11).fill(null); start(); };
     document.getElementById("mbq-pdf").onclick = function () { downloadPdf(r); };
 
-    if (!EMBED) {
-      var tg = document.getElementById("mbq-embed-toggle");
-      var bx = document.getElementById("mbq-embed-box");
-      tg.onclick = function () { bx.style.display = bx.style.display === "block" ? "none" : "block"; };
-      document.getElementById("mbq-copy").onclick = function () {
-        var ta = document.getElementById("mbq-embed-code");
-        ta.select();
-        try { document.execCommand("copy"); this.textContent = "Copied"; } catch (e) {}
-        var self = this; setTimeout(function () { self.textContent = "Copy code"; }, 1600);
-      };
-    }
+    wireEmbed();
   }
 
   function loadJsPDF(cb) {
