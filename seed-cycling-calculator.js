@@ -6,7 +6,7 @@
      - Irregular / menopausal: new-moon method (new moon = day 1, 28-day schedule).
    Evidence for seed cycling is limited; framing is deliberately honest.
    No backend, no tracking; values stay on device.
-   v1.0.0 */
+   v1.0.1 - cycle-length field full-width (removed decorative unit select that collapsed it) */
 (function () {
   "use strict";
 
@@ -172,9 +172,8 @@
     if (mode === "regular") {
       fields = '<div class="fld"><label for="sc-date">First day of your last period</label>'
         + '<input type="date" id="sc-date"></div>'
-        + '<div class="fld"><label for="sc-len">Average cycle length</label>'
-        + '<div class="row"><div class="grow"><input type="number" id="sc-len" step="1" value="28" placeholder="28"></div>'
-        + '<select id="sc-len-u" disabled><option>days</option></select></div>'
+        + '<div class="fld"><label for="sc-len">Average cycle length (days)</label>'
+        + '<input type="number" id="sc-len" step="1" value="28" placeholder="28">'
         + '<p class="hint">Most cycles are 24\u201335 days. If you track ovulation, switch seeds the day after you ovulate.</p></div>';
     } else {
       fields = '<div class="note" style="margin:0 0 4px">If your cycle is irregular, absent, or you\u2019re peri/post-menopausal, the common approach is to follow the moon: <b>new moon = day 1</b>, then a steady 28-day rhythm. No dates needed \u2014 just press calculate.</div>';
